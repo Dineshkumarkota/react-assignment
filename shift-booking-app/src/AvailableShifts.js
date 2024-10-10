@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const AvailableShifts = () => {
+const AvailableShifts = ({setBookedShifts}) => {
   const [shifts, setShifts] = useState([]);
   const [city, setCity] = useState('');
   const [bookedShifts, setBookedShifts] = useState([]);

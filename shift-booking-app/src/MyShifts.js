@@ -1,25 +1,9 @@
 // src/MyShifts.js
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 
 const MyShifts = ({ bookedShifts }) => {
-  const [myShifts, setMyShifts] = useState([]);
-
-  useEffect(() => {
-    const fetchMyShifts = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/my-shifts');
-        setMyShifts(response.data);
-      } catch (error) {
-        console.error('Error fetching my shifts:', error);
-      }
-    };
-
-    fetchMyShifts();
-  }, []);
-
   // Group shifts by date
-  const groupedShifts = myShifts.reduce((acc, shift) => {
+  const groupedShifts = bookedShifts.reduce((acc, shift) => {
     const date = shift.date;
     if (!acc[date]) {
       acc[date] = [];
@@ -52,3 +36,4 @@ const MyShifts = ({ bookedShifts }) => {
 };
 
 export default MyShifts;
+
