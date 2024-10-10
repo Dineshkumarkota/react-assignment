@@ -7,7 +7,7 @@ function App() {
     <div>
     <h1>Shift Booking Application</h1>
     <AvailableShifts setBookedShifts={setBookedShifts} />
-    <MyShifts bookedShifts={bookedShifts} />
+    <MyShifts bookedShifts={bookedShifts} setBookedShifts={setBookedShifts} />
   </div>
 );
 }

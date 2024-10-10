@@ -1,7 +1,8 @@
 // src/MyShifts.js
 import React from 'react';
+import axios from 'axios';
 
-const MyShifts = ({ bookedShifts }) => {
+const MyShifts = ({ bookedShifts,setBookedShifts }) => {
   // Group shifts by date
   const groupedShifts = bookedShifts.reduce((acc, shift) => {
     const date = shift.date;
@@ -11,6 +12,15 @@ const MyShifts = ({ bookedShifts }) => {
     acc[date].push(shift);
     return acc;
   }, {});
+  const handleCancelShift = async (shiftId) => {
+    try {
+      await axios.delete(`http://localhost:8080/cancel-shift/${shiftId}`);
+      setBookedShifts((prev) => prev.filter((shift) => shift.id !== shiftId));
+      console.log('Shift canceled:', shiftId);
+    } catch (error) {
+      console.error('Error canceling shift:', error);
+    }
+  };
 
   return (
     <div>
@@ -25,6 +35,7 @@ const MyShifts = ({ bookedShifts }) => {
               {shifts.map((shift) => (
                 <li key={shift.id}>
                   {shift.city}
+                  <button onClick={() => handleCancelShift(shift.id)}>Cancel</button>
                 </li>
               ))}
             </ul>
