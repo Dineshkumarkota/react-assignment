@@ -4,51 +4,63 @@ import axios from 'axios';
 
 const AvailableShifts = () => {
   const [shifts, setShifts] = useState([]);
-  const [city, setCity] = useState('');  // For filtering by city
-  const [bookedShifts, setBookedShifts] = useState([]); // For tracking booked shifts
+  const [city, setCity] = useState('');
+  const [bookedShifts, setBookedShifts] = useState([]);
+  const [loading, setLoading] = useState(true);  // Loading state
+  const [error, setError] = useState(null);  // Error state
 
   useEffect(() => {
-    // Fetch available shifts from the API
     const fetchShifts = async () => {
+      setLoading(true); // Start loading
       try {
         const response = await axios.get('http://localhost:8080/available-shifts');
         setShifts(response.data);
       } catch (error) {
+        setError('Error fetching shifts. Please try again later.'); // Set error message
         console.error('Error fetching shifts:', error);
+      } finally {
+        setLoading(false); // End loading
       }
     };
 
     fetchShifts();
   }, []);
 
-  // Filter shifts by city
   const filteredShifts = city
-    ? shifts.filter(shift => shift.city.toLowerCase().includes(city.toLowerCase()))
+    ? shifts.filter((shift) => shift.city.toLowerCase().includes(city.toLowerCase()))
     : shifts;
 
-    const handleBookShift = async (shiftId) => {
-        try {
-          // Send booking request to the API
-          await axios.post(`http://localhost:8080/book-shift/${shiftId}`);
-          // Update local state
-          setBookedShifts([...bookedShifts, shiftId]);
-          console.log('Shift booked:', shiftId);
-        } catch (error) {
-          console.error('Error booking shift:', error);
-        }
-      };
+  const handleToggleShift = async (shiftId) => {
+    if (bookedShifts.includes(shiftId)) {
+      // Cancel Shift
+      await handleCancelShift(shiftId);
+    } else {
+      // Book Shift
+      await handleBookShift(shiftId);
+    }
+  };
 
-      const handleCancelShift = async (shiftId) => {
-        try {
-          // Send cancellation request to the API
-          await axios.delete(`http://localhost:8080/cancel-shift/${shiftId}`);
-          // Update local state
-          setBookedShifts(bookedShifts.filter((id) => id !== shiftId));
-          console.log('Shift canceled:', shiftId);
-        } catch (error) {
-          console.error('Error canceling shift:', error);
-        }
-      };
+  const handleBookShift = async (shiftId) => {
+    try {
+      await axios.post(`http://localhost:8080/book-shift/${shiftId}`);
+      setBookedShifts((prev) => [...prev, shiftId]); // Update booked shifts
+    } catch (error) {
+      console.error('Error booking shift:', error);
+    }
+  };
+
+  const handleCancelShift = async (shiftId) => {
+    try {
+      await axios.delete(`http://localhost:8080/cancel-shift/${shiftId}`);
+      setBookedShifts((prev) => prev.filter((id) => id !== shiftId)); // Update booked shifts
+    } catch (error) {
+      console.error('Error canceling shift:', error);
+    }
+  };
+
+  // Loading and Error Handling
+  if (loading) return <p>Loading shifts...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div>
@@ -67,15 +79,20 @@ const AvailableShifts = () => {
       </div>
 
       {/* Shift List */}
-      <ul>
-        {filteredShifts.map((shift) => (
-          <li key={shift.id}>
-            <span>{shift.date} - {shift.city}</span>
-            <button onClick={() => handleBookShift(shift.id)}>Book</button>
-            <button onClick={() => handleCancelShift(shift.id)}>Cancel</button>
-          </li>
-        ))}
-      </ul>
+      {filteredShifts.length === 0 ? (
+        <p>No available shifts found.</p>
+      ) : (
+        <ul>
+          {filteredShifts.map((shift) => (
+            <li key={shift.id}>
+              <span>{shift.date} - {shift.city}</span>
+              <button onClick={() => handleToggleShift(shift.id)}>
+                {bookedShifts.includes(shift.id) ? 'Cancel' : 'Book'}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
