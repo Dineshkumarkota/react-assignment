@@ -5,6 +5,7 @@ import axios from 'axios';
 const AvailableShifts = () => {
   const [shifts, setShifts] = useState([]);
   const [city, setCity] = useState('');  // For filtering by city
+  const [bookedShifts, setBookedShifts] = useState([]); // For tracking booked shifts
 
   useEffect(() => {
     // Fetch available shifts from the API
@@ -25,15 +26,29 @@ const AvailableShifts = () => {
     ? shifts.filter(shift => shift.city.toLowerCase().includes(city.toLowerCase()))
     : shifts;
 
-  const handleBookShift = (shiftId) => {
-    // Logic for booking the shift (will be implemented later)
-    console.log('Book shift:', shiftId);
-  };
+    const handleBookShift = async (shiftId) => {
+        try {
+          // Send booking request to the API
+          await axios.post(`http://localhost:8080/book-shift/${shiftId}`);
+          // Update local state
+          setBookedShifts([...bookedShifts, shiftId]);
+          console.log('Shift booked:', shiftId);
+        } catch (error) {
+          console.error('Error booking shift:', error);
+        }
+      };
 
-  const handleCancelShift = (shiftId) => {
-    // Logic for canceling the shift (will be implemented later)
-    console.log('Cancel shift:', shiftId);
-  };
+      const handleCancelShift = async (shiftId) => {
+        try {
+          // Send cancellation request to the API
+          await axios.delete(`http://localhost:8080/cancel-shift/${shiftId}`);
+          // Update local state
+          setBookedShifts(bookedShifts.filter((id) => id !== shiftId));
+          console.log('Shift canceled:', shiftId);
+        } catch (error) {
+          console.error('Error canceling shift:', error);
+        }
+      };
 
   return (
     <div>
