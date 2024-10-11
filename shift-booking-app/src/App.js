@@ -1,15 +1,16 @@
-import React,{useState} from 'react';
-import AvailableShifts from './AvailableShifts';
-import MyShifts from './MyShifts';
-function App() {
-  const [bookedShifts, setBookedShifts] = useState([]);
-  return (
-    <div>
-    <h1>Shift Booking Application</h1>
-    <AvailableShifts setBookedShifts={setBookedShifts} />
-    <MyShifts bookedShifts={bookedShifts} setBookedShifts={setBookedShifts} />
-  </div>
-);
-}
+// App.js
+import React from 'react';
+import MyShifts from './components/MyShifts';
+import AvailableShifts from './components/AvailableShifts';
+
+const App = () => {
+    return (
+        <div className="App">
+            <h1>Shift Booking Application</h1>
+            <MyShifts />
+            <AvailableShifts />
+        </div>
+    );
+};
 
 export default App;

@@ -1,0 +1,85 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #F1F4F8; /* Light background color */
+}
+
+h2, h3 {
+  color: #004FB4; /* Darker blue for headings */
+}
+
+/* Feedback Message Styles */
+.feedback-message {
+  color: #E2006A; /* Error color */
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Shift Container Styles */
+.available-shifts-container,
+.my-shifts-container {
+  margin: 20px;
+  padding: 10px;
+  background-color: #ffffff; /* White background for sections */
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
+
+/* Shift Card Styles */
+.shift-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #ffffff; /* White background for cards */
+  transition: transform 0.2s; /* Add transition for scale */
+}
+
+.shift-card:hover {
+  transform: scale(1.02); /* Scale effect on hover */
+}
+
+/* Button Styles */
+.book-button,
+.cancel-button {
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.book-button {
+  background-color: #55CB82; /* Green for booking */
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.book-button:hover {
+  background-color: #4CAF50; /* Darker green on hover */
+}
+
+.cancel-button {
+  background-color: #d9534f; /* Red for canceling */
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.cancel-button:hover {
+  background-color: #c9302c; /* Darker red on hover */
+}
+
+/* Shifts List Styles */
+.shifts-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .available-shifts-container,
+  .my-shifts-container {
+    margin: 10px;
+    padding: 5px;
+  }
+}
